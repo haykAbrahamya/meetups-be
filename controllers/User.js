@@ -47,7 +47,7 @@ export const createUser = async (req, res) => {
       return res.status(201).json(response)
     } catch (ex) {
       if (ex instanceof Sequelize.UniqueConstraintError) {
-        return res.status(409).json({ message: 'user already exists' })
+        return res.status(409).json({ message: 'Տվյալ մուտքանունն արդեն զբաղված է' })
       }
 
       return res.status(500).json({ message: 'something went wrong' })
@@ -166,7 +166,7 @@ export const userLogin = async (req, res) => {
     })
 
     if (!user) {
-      return res.status(403).json({ message: 'Invalid username or password' })
+      return res.status(403).json({ message: 'Սխալ մուտքանուն կամ գաղտնաբառ' })
     }
 
     bcrypt.compare(password, user.password, async (err, result) => {
@@ -190,7 +190,7 @@ export const userLogin = async (req, res) => {
 
         return res.status(200).json({ token, userData })
       } else {
-        return res.status(403).json({ message: 'Invalid username or password' })
+        return res.status(403).json({ message: 'Սխալ մուտքանուն կամ գաղտնաբառ' })
       }
     })
   } catch (ex) {
