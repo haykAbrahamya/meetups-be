@@ -7,6 +7,7 @@ import Models, { Sequelize } from '../models'
 import config from '../config'
 
 const User = Models.user
+const { Op } = require('sequelize')
 
 export const createUser = async (req, res) => {
   const {
@@ -124,17 +125,38 @@ export const deleteUser = async (req, res) => {
 }
 
 export const getUsersList = async (req, res) => {
-  let pageSize = req.query.pageSize || 10
-  let pageNo = req.query.pageNo || 0
-
+  const pageSize = req.query.pageSize || 10
+  const pageNo = req.query.pageNo || 0
   const sortField = req.query.sortField || 'id'
   const sortOrder = req.query.sortOrder || 'DESC'
+  const {
+    name
+  } = req.query
 
   try {
-    const users = await User.findAndCountAll({
+    let whereStatement = {}
+    if (name) {
+      whereStatement[Op.or] = [
+        {
+          fullname: {
+            [Op.like]: '%' + name + '%'
+          }
+        },
+        {
+          username: {
+            [Op.like]: '%' + name + '%'
+          }
+        }
+      ]
+    }
+
+    const users = await User.findAll({
       ...paginate({ pageNo, pageSize }),
       order: [[ sortField, sortOrder ]],
-      attributes: { exclude: ['password'] }
+      where: whereStatement,
+      attributes: {
+        exclude: ['password'] 
+      },
     })
 
     return res.status(200).json(users)
