@@ -3,7 +3,8 @@ import bodyParser from 'body-parser'
 
 
 import {
-  UserRouter
+  UserRouter,
+  FollowingRouter
 } from './routers'
 
 const app = express()
@@ -25,6 +26,7 @@ app.use(function(req, res, next) {
 });
 
 app.use('/user', UserRouter)
+app.use('/following', FollowingRouter)
 
 app.use(function(req, res, next){
   return res.status(404).json({ message: 'page does not exist' });

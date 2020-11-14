@@ -7,6 +7,7 @@ import Models, { Sequelize } from '../models'
 import config from '../config'
 
 const User = Models.user
+const Following = Models.following
 const { Op } = require('sequelize')
 
 export const createUser = async (req, res) => {
@@ -161,6 +162,52 @@ export const getUsersList = async (req, res) => {
 
     return res.status(200).json(users)
   } catch (ex) {
+    return res.status(500).json({ message: 'something went wrong' })
+  }
+}
+
+export const getUserById = async (req, res) => {
+  const userId = req.query.userId
+
+  if (!userId) {
+    return res.status(400).json({ message: 'input userId' })
+  }
+
+  try {
+    const user = await User.findOne({
+      where: {
+        id: userId
+      },
+      include: [
+        {
+          model: Following,
+          as: 'followers',
+          include: {
+            model: User,
+            as: 'follower',
+            attributes: { exclude: ['password'] }
+          },
+          attributes: ['id']
+        },
+        {
+          model: Following,
+          as: 'following',
+          include: {
+            model: User,
+            as: 'user',
+            attributes: { exclude: ['password'] }
+          },
+          attributes: ['id']
+        }
+      ],
+      attributes: {
+        exclude: ['password']
+      }
+    })
+
+    return res.status(200).json(user)
+  } catch (e) {
+    console.log('e', e)
     return res.status(500).json({ message: 'something went wrong' })
   }
 }
