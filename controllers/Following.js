@@ -39,8 +39,6 @@ export const followUser = async (req, res) => {
       userId
     })
 
-    console.log('following', following.id)
-
     let response = {
       id: following.id,
       user
@@ -72,7 +70,7 @@ export const unfollowUser = async (req, res) => {
       return res.status(404).json({ message: 'following was not found' })
     }
 
-    return res.status(201).json({ message: 'succes unfollow' })
+    return res.status(201).json({ message: 'success unfollow' })
   } catch (e) {
     return res.status(500).json({ message: 'something went wrong' })
   }

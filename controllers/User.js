@@ -156,12 +156,24 @@ export const getUsersList = async (req, res) => {
       order: [[ sortField, sortOrder ]],
       where: whereStatement,
       attributes: {
-        exclude: ['password'] 
+        exclude: ['password'],
+        include: [
+          [
+            Sequelize.literal(`(
+                SELECT COUNT(*)
+                FROM followings as following
+                WHERE
+                  following.userId = user.id
+              )`),
+            'followersCount'
+          ]
+        ]
       },
     })
 
     return res.status(200).json(users)
   } catch (ex) {
+    console.log('ex', ex)
     return res.status(500).json({ message: 'something went wrong' })
   }
 }
