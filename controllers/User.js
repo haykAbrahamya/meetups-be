@@ -169,6 +169,7 @@ export const getUsersList = async (req, res) => {
           ]
         ]
       },
+      order: [[ Sequelize.literal(sortField), 'DESC' ]]
     })
 
     return res.status(200).json(users)
