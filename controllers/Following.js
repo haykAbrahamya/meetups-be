@@ -54,7 +54,7 @@ export const followUser = async (req, res) => {
       user
     }
 
-    sendMessage('follow_user', myUser, [userId])
+    sendMessage('follow_user', { type: 1, user: myUser, followingId: following.id }, [userId])
 
     return res.status(201).json(response)
   } catch (e) {
@@ -82,7 +82,7 @@ export const unfollowUser = async (req, res) => {
       return res.status(404).json({ message: 'following was not found' })
     }
 
-    sendMessage('unfollow_user', myId, [userId])
+    sendMessage('unfollow_user', { type: 2, user:{ userId: myId, fullname: req.userData.fullname } }, [userId])
     return res.status(201).json({ message: 'success unfollow' })
   } catch (e) {
     return res.status(500).json({ message: 'something went wrong' })
