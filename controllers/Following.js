@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 import { paginate } from './functions'
 import Models, { Sequelize } from '../models'
 import config from '../config'
+import { sendMessage } from '../socket'
 
 const User = Models.user
 const Following = Models.following
@@ -30,6 +31,15 @@ export const followUser = async (req, res) => {
       }
     })
 
+    const myUser = await User.findOne({
+      where: {
+        id: myId
+      },
+      attributes: {
+        exclude: ['password']
+      }
+    })
+
     if (!user) {
       return res.status(404).json({ message: 'user was not found' })
     }
@@ -43,6 +53,8 @@ export const followUser = async (req, res) => {
       id: following.id,
       user
     }
+
+    sendMessage('follow_user', myUser, [userId])
 
     return res.status(201).json(response)
   } catch (e) {
@@ -70,6 +82,7 @@ export const unfollowUser = async (req, res) => {
       return res.status(404).json({ message: 'following was not found' })
     }
 
+    sendMessage('unfollow_user', myId, [userId])
     return res.status(201).json({ message: 'success unfollow' })
   } catch (e) {
     return res.status(500).json({ message: 'something went wrong' })

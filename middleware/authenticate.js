@@ -20,7 +20,6 @@ module.exports = (req, res, next) => {
 
     next();
   } catch (exception) {
-    console.log('exception', exception)
     errorMsg = 'Authentication failed';
     errors.jwt = [errorMsg];
     return res.status(401).json({ errors });
