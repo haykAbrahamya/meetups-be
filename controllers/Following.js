@@ -2,10 +2,8 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 
-import { paginate } from './functions'
-import Models, { Sequelize } from '../models'
-import config from '../config'
-import { sendMessage } from '../socket'
+import Models from '../models'
+import { createNotification } from './Notification'
 
 const User = Models.user
 const Following = Models.following
@@ -54,7 +52,13 @@ export const followUser = async (req, res) => {
       user
     }
 
-    sendMessage('follow_user', { type: 1, user: myUser, followingId: following.id }, [userId])
+    const notification = {
+      type: 1,
+      user: myUser,
+      followingId: following.id
+    }
+
+    createNotification('follow_user', notification, [userId])
 
     return res.status(201).json(response)
   } catch (e) {
@@ -82,7 +86,15 @@ export const unfollowUser = async (req, res) => {
       return res.status(404).json({ message: 'following was not found' })
     }
 
-    sendMessage('unfollow_user', { type: 2, user:{ userId: myId, fullname: req.userData.fullname } }, [userId])
+    const notification = {
+      type: 2,
+      user: { 
+        userId: myId,
+        fullname: req.userData.fullname
+      }
+    }
+
+    createNotification('unfollow_user', notification, [userId])
     return res.status(201).json({ message: 'success unfollow' })
   } catch (e) {
     return res.status(500).json({ message: 'something went wrong' })

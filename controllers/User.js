@@ -174,7 +174,6 @@ export const getUsersList = async (req, res) => {
 
     return res.status(200).json(users)
   } catch (ex) {
-    console.log('ex', ex)
     return res.status(500).json({ message: 'something went wrong' })
   }
 }
@@ -220,7 +219,6 @@ export const getUserById = async (req, res) => {
 
     return res.status(200).json(user)
   } catch (e) {
-    console.log('e', e)
     return res.status(500).json({ message: 'something went wrong' })
   }
 }

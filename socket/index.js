@@ -24,6 +24,7 @@ export const initSocket = (server) => {
 export const sendMessage = (type = '', message = {}, userIds = []) => {
   for (const userId of userIds) {
     const socket = sockets[userId]
+
     if (socket) {
       socket.emit(type, message)
     }
