@@ -2,9 +2,8 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 
-import { paginate } from './functions'
-import Models, { Sequelize } from '../models'
-import config from '../config'
+import Models from '../models'
+import { createNotification } from './Notification'
 
 const User = Models.user
 const Following = Models.following
@@ -30,6 +29,15 @@ export const followUser = async (req, res) => {
       }
     })
 
+    const myUser = await User.findOne({
+      where: {
+        id: myId
+      },
+      attributes: {
+        exclude: ['password']
+      }
+    })
+
     if (!user) {
       return res.status(404).json({ message: 'user was not found' })
     }
@@ -43,6 +51,14 @@ export const followUser = async (req, res) => {
       id: following.id,
       user
     }
+
+    const notification = {
+      type: 1,
+      user: myUser,
+      followingId: following.id
+    }
+
+    createNotification('follow_user', notification, [userId])
 
     return res.status(201).json(response)
   } catch (e) {
@@ -70,6 +86,15 @@ export const unfollowUser = async (req, res) => {
       return res.status(404).json({ message: 'following was not found' })
     }
 
+    const notification = {
+      type: 2,
+      user: { 
+        userId: myId,
+        fullname: req.userData.fullname
+      }
+    }
+
+    createNotification('unfollow_user', notification, [userId])
     return res.status(201).json({ message: 'success unfollow' })
   } catch (e) {
     return res.status(500).json({ message: 'something went wrong' })
