@@ -4,7 +4,7 @@ import {
   updateUser,
   deleteUser,
   getUsersList,
-  getUserById,
+  getUserByIdOrUsername,
   userLogin
 } from '../controllers/User'
 
@@ -15,6 +15,6 @@ router.post('/login', userLogin)
 router.put('/:userId', updateUser)
 router.delete('/:userId', deleteUser)
 router.get('/search', getUsersList)
-router.get('/', getUserById)
+router.get('/', getUserByIdOrUsername)
 
 export default router
