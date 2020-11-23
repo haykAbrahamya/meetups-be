@@ -178,18 +178,27 @@ export const getUsersList = async (req, res) => {
   }
 }
 
-export const getUserById = async (req, res) => {
-  const userId = req.query.userId
+export const getUserByIdOrUsername = async (req, res) => {
+  const {
+    userId,
+    username
+  } = req.query
 
-  if (!userId) {
-    return res.status(400).json({ message: 'input userId' })
+  if (!userId && !username) {
+    return res.status(400).json({ message: 'input userId or username' })
+  }
+
+  const whereStatement = {}
+
+  if (username) {
+    whereStatement.username = username
+  } else {
+    whereStatement.id = userId
   }
 
   try {
     const user = await User.findOne({
-      where: {
-        id: userId
-      },
+      where: whereStatement,
       include: [
         {
           model: Following,
