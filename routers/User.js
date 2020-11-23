@@ -15,6 +15,6 @@ router.post('/login', userLogin)
 router.put('/:userId', updateUser)
 router.delete('/:userId', deleteUser)
 router.get('/search', getUsersList)
-router.get('/get-by-id', getUserById)
+router.get('/', getUserById)
 
 export default router
