@@ -22,6 +22,13 @@ module.exports = (sequelize, DataTypes) => {
       sourceKey: 'creatorId',
       foreignKey: 'id',
       as: 'creator'
+    }),
+    Meetup.belongsToMany(models.user, {
+      through: models.meetupUser,
+      hooks: true,
+      onDelete: 'cascade',
+      foreignKey: 'meetupId',
+      as: 'participants'
     })
   }
 
