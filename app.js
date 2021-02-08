@@ -5,7 +5,7 @@ import bodyParser from 'body-parser'
 import {
   UserRouter,
   FollowingRouter,
-  NotificationRouter
+  NotificationRouter,
   MeetupsRouter
 } from './routers'
 

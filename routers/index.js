@@ -6,6 +6,6 @@ import NotificationRouter from './Notification'
 export {
   UserRouter,
   FollowingRouter,
-  NotificationRouter
+  NotificationRouter,
   MeetupsRouter
 }
