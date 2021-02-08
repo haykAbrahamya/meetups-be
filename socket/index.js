@@ -13,9 +13,9 @@ export const initSocket = (server) => {
     sockets[userId] = socket
 
     socket.on('disconnect', () => {
-      console.log('Client disconnected')
-
       const userId = Object.keys(sockets).find(key => socket.id === sockets[key].id)
+      
+      console.log(`Client disconnected - ${userId}`)
       delete sockets[userId]
     })
   })

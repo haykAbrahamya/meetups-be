@@ -6,6 +6,7 @@ import {
   UserRouter,
   FollowingRouter,
   NotificationRouter
+  MeetupsRouter
 } from './routers'
 
 const app = express()
@@ -28,6 +29,7 @@ app.use(function(req, res, next) {
 
 app.use('/user', UserRouter)
 app.use('/following', FollowingRouter)
+app.use('/meetups', MeetupsRouter)
 app.use('/notifications', NotificationRouter)
 
 app.use(function(req, res, next){

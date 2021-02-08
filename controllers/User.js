@@ -166,6 +166,15 @@ export const getUsersList = async (req, res) => {
                   following.userId = user.id
               )`),
             'followersCount'
+          ],
+          [
+            Sequelize.literal(`(
+                SELECT COUNT(*)
+                FROM meetups as meetup
+                WHERE
+                  meetup.creatorId = user.id
+              )`),
+            'meetupsCount'
           ]
         ]
       },

@@ -18,7 +18,7 @@ export const createNotification = async (type, payload, userIds = []) => {
     })
 
     for (const userId of userIds) {
-      const userNotification = UserNotification.create({
+      const userNotification = await UserNotification.create({
         userId,
         notificationId: notification.id
       })
